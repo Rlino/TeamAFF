@@ -1,0 +1,58 @@
+
+//Récupère tous les docuements du repertoir mentionné
+function get_all_documents($nombre){
+
+$uploads = wp_upload_dir();
+
+if ($dir = opendir($uploads['basedir'].'/teamAFF-docs/2014')) {
+	$docs = array();
+	while (false !== ($file = readdir($dir))) {
+		if ($file != "." && $file != "..") {
+			$docs[] = $file; 
+			$compteur +=1;
+		}
+	}
+	closedir($dir);
+}
+		
+        foreach($docs as $document) {
+        $typeFile = new SplFileInfo($document);
+        $extension = pathinfo($typeFile->getFilename(), PATHINFO_EXTENSION);
+        strtolower($extension);
+        	if($extension=='doc' ||$extension=='docx' ||$extension=='xls'||$extension=='xlsm' ||$extension=='xlsx' ||$extension=='pdf'){
+              switch($extension){
+                case 'docx':
+                case 'doc' :
+                    $extensionIcon = 'wordIcon';
+                    break;
+                case 'xlsm':
+                case 'xlsx':
+                case 'xls':
+                    $extensionIcon = 'excelIcon';
+                    break;
+                default :
+                    $extensionIcon = 'pdfIcon';
+                    break;
+                  
+               } //end swith
+          ?>
+          <tr>
+             
+               <td>
+               
+                 <img src="<?php echo $uploads['baseurl'].'/teamAFF-docs/'.$extensionIcon.'.png' ?>"/>
+
+              </td>
+               <td>
+                   <a href="<?php echo $uploads['baseurl'].'/teamAFF-docs/2014/'.$document;?>">
+              		<?php 
+                    $docName = substr(basename($document), 0,-4);
+                    echo basename($docName);
+                  ?>
+                  </a>
+              </td>
+            
+        	</tr>
+        	<?php } //end if enxtension
+        } //end foreach
+}//end get_all_documents
